@@ -23,7 +23,6 @@ public class UIBase : MonoBehaviour
         {
             for (int i = 0; i < parent.childCount; i++)
             {
-                Debug.Log("Child: " + parent.GetChild(i).name);
                 GetAllGraphics(parent.GetChild(i));
             }
         }
@@ -31,7 +30,6 @@ public class UIBase : MonoBehaviour
 
     public virtual IEnumerator Show()
     {
-        Debug.Log("SHOW " + name);
         Tween tween = null;
         gameObject.SetActive(true);
         foreach (var graphic in graphics)

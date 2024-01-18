@@ -41,18 +41,16 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
-        
         instance = this;
-        if (isMobile())
-            currentPlatform = mobile;
-        else 
-            currentPlatform = pc;
+        // if (true)
+        currentPlatform = mobile;
+        // else 
+        //     currentPlatform = pc;
         currentPlatform.parent.SetActive(true);
     }
 
     public void MoveToPickCategory()
     {
-        Debug.Log("MOVE TO PICK CATEGORY");
         StartCoroutine(CR_MoveToPickCategory());
         IEnumerator CR_MoveToPickCategory()
         {

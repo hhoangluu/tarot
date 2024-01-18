@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>GameName %UNITY_CUSTOM_MYTAG%</title>
+    <title>GameMondi Tarot</title>
     <link rel="shortcut icon" href="TemplateData/img/favicon.ico">
     <link rel="stylesheet" href="TemplateData/css/style.css">
     <script src="Build/UnityLoader.js"></script>
@@ -53,18 +53,6 @@
 			}
 		}
 		var buildUrl = "%UNITY_WEBGL_BUILD_URL%";
-      	var loaderUrl = buildUrl + "/Public.loader.js";
-      	var config = {
-        	dataUrl: buildUrl + "/Public.data.br",
-        	frameworkUrl: buildUrl + "/Public.framework.js.br",
-        	codeUrl: buildUrl + "/Public.wasm.br",
-       		streamingAssetsUrl: "StreamingAssets",
-        	companyName: "DefaultCompany",
-        	productName: "browserData2D",
-        	productVersion: "1.0",
-        	// showBanner: unityShowBanner,
-      	};
-		config.matchWebGLToCanvasSize = false 
 		function RuntimeInitialized(){
 		}
 		
@@ -91,13 +79,11 @@
 				onRuntimeInitialized:RuntimeInitialized,
 			},		
 		});
-		// var setCanvasSize = function() {
-
-		// 	const canvas = document.getElementById('#canvas')
-		// 	canvas.width = window.innerWidth;
-		// 	canvas.height = window.innerHeight;
-		// }
-		// setCanvasSize();
+		var setCanvasSize = function() {
+			const canvas = document.getElementById('#canvas')
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
     </script>
   </head>
   <body>

@@ -22,7 +22,6 @@ public class ButtonCategory : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             tween = null;
         }
         tween = transform.DOMoveY(startPos.y + 30, 0.5f);
-        Debug.Log("startPos.y + 5" + (startPos.y +20));
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -33,7 +32,6 @@ public class ButtonCategory : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             tween = null;
         }
         tween = transform.DOMoveY(startPos.y, 0.5f);
-        Debug.Log("startPos.y " + startPos.y);
 
     }
 
