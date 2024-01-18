@@ -16,6 +16,8 @@ public class ButtonCategory : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+         if (GameManager.instance.isMobile())
+            return;
         if (tween != null && tween.active)
         {
             tween.Kill();
@@ -26,6 +28,8 @@ public class ButtonCategory : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (GameManager.instance.isMobile())
+            return;
         if (tween != null && tween.active)
         {
             tween.Kill();

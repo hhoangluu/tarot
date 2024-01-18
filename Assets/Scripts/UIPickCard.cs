@@ -19,6 +19,7 @@ public class UIPickCard : UIBase
     public int numberOfCards = 24;
     public float radius = 5f;
     public float angleSpeed = 5f;
+    [SerializeField] 
     List<UICardPickingButton> cards = new List<UICardPickingButton>();
     bool isRotating;
     void Start()
@@ -51,23 +52,31 @@ public class UIPickCard : UIBase
     void ArrangeCards()
     {
         Vector3 centerPos = center.position; // Trung tâm của vòng tròn
-
-        for (int i = numberOfCards - 1; i >= 0; i--)
+        if (GameManager.instance.isMobile())
         {
-            float angle = i * (360f / numberOfCards) + 90;
-            float radians = angle * Mathf.Deg2Rad;
-
-            float x = centerPos.x - radius * Mathf.Cos(radians);
-            float y = centerPos.y - radius * Mathf.Sin(radians);
-
-            Vector3 cardPosition = new Vector3(x, y, 0f);
-            Quaternion cardRotation = Quaternion.LookRotation(Vector3.forward, cardPosition - centerPos);
-
-            UICardPickingButton card = Instantiate(cardPrefab, cardPosition, cardRotation, center);
-            card.gameObject.SetActive(true);
-            // card.transform.eulerAngles = new Vector3(0, 0, card.transform.eulerAngles.z + 10);
-            cards.Add(card);
+            
         }
+        else
+        {
+            cards.Clear();
+            for (int i = numberOfCards - 1; i >= 0; i--)
+            {
+                float angle = i * (360f / numberOfCards) + 90;
+                float radians = angle * Mathf.Deg2Rad;
+
+                float x = centerPos.x - radius * Mathf.Cos(radians);
+                float y = centerPos.y - radius * Mathf.Sin(radians);
+
+                Vector3 cardPosition = new Vector3(x, y, 0f);
+                Quaternion cardRotation = Quaternion.LookRotation(Vector3.forward, cardPosition - centerPos);
+
+                UICardPickingButton card = Instantiate(cardPrefab, cardPosition, cardRotation, center);
+                card.gameObject.SetActive(true);
+                // card.transform.eulerAngles = new Vector3(0, 0, card.transform.eulerAngles.z + 10);
+                cards.Add(card);
+            }
+        }
+
     }
 
     private void Update()

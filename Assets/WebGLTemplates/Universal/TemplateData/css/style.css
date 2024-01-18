@@ -134,8 +134,8 @@ body{
 	
 	.keepRatio{
 		width:100%;
-		height: 100%;
-		position: relative;
+		height:178vw;
+		margin:0 auto;
 	}
 
 	.webgl-content,#loadingBlock,#errorBrowserBlock{
@@ -192,15 +192,14 @@ body{
 	
 	.webgl-content,#loadingBlock,#errorBrowserBlock{
 		border:1px solid #c6c9ca;
-		width:calc(100% - 2px);
-		height:100%;
+		width:100%;
 	}
 } */
 
 
 /* When aspect-ratio is bigger than 16/9*/
-
-/*@media (min-aspect-ratio: 16/9){
+/* 
+@media (min-aspect-ratio: 16/9){
 	body{
 		display:flex;
 		flex-wrap:wrap;
@@ -231,4 +230,4 @@ body{
 		border:1px solid #c6c9ca;
 		height:calc(100% - 2px);
 	}
-}*/
+} */

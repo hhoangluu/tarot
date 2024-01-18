@@ -42,10 +42,10 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        // if (true)
+        if (isMobile())
         currentPlatform = mobile;
-        // else 
-        //     currentPlatform = pc;
+        else 
+            currentPlatform = pc;
         currentPlatform.parent.SetActive(true);
     }
 
