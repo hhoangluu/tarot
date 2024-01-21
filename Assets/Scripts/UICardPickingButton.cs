@@ -26,12 +26,12 @@ public class UICardPickingButton : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-            HightLight();
+        HightLight();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-            LowLight();
+        LowLight();
     }
 
     public void OnPointerClick(PointerEventData eventData)

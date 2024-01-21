@@ -27,13 +27,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] Platform mobile;
 
     private Platform currentPlatform;
-    string endpoint = "https://dev-widget-api.gamemondi.dev/api/v1/tarots/";
+    string endpoint = "https://widget-api.gamemondi.co/api/v1/tarots/";
+    
     private CardInfo cardInfo;
     [DllImport("__Internal")]
     private static extern bool IsMobile();
 
     public bool isMobile()
     {
+       // return true;
 #if !UNITY_EDITOR && UNITY_WEBGL
         return IsMobile();
 #endif

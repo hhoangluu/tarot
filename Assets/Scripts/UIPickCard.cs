@@ -58,23 +58,23 @@ public class UIPickCard : UIBase
         }
         else
         {
-            cards.Clear();
-            for (int i = numberOfCards - 1; i >= 0; i--)
-            {
-                float angle = i * (360f / numberOfCards) + 90;
-                float radians = angle * Mathf.Deg2Rad;
+            // cards.Clear();
+            // for (int i = numberOfCards - 1; i >= 0; i--)
+            // {
+            //     float angle = i * (360f / numberOfCards) + 90;
+            //     float radians = angle * Mathf.Deg2Rad;
 
-                float x = centerPos.x - radius * Mathf.Cos(radians);
-                float y = centerPos.y - radius * Mathf.Sin(radians);
+            //     float x = centerPos.x - radius * Mathf.Cos(radians);
+            //     float y = centerPos.y - radius * Mathf.Sin(radians);
 
-                Vector3 cardPosition = new Vector3(x, y, 0f);
-                Quaternion cardRotation = Quaternion.LookRotation(Vector3.forward, cardPosition - centerPos);
+            //     Vector3 cardPosition = new Vector3(x, y, 0f);
+            //     Quaternion cardRotation = Quaternion.LookRotation(Vector3.forward, cardPosition - centerPos);
 
-                UICardPickingButton card = Instantiate(cardPrefab, cardPosition, cardRotation, center);
-                card.gameObject.SetActive(true);
-                // card.transform.eulerAngles = new Vector3(0, 0, card.transform.eulerAngles.z + 10);
-                cards.Add(card);
-            }
+            //     UICardPickingButton card = Instantiate(cardPrefab, cardPosition, cardRotation, center);
+            //     card.gameObject.SetActive(true);
+            //     // card.transform.eulerAngles = new Vector3(0, 0, card.transform.eulerAngles.z + 10);
+            //     cards.Add(card);
+            // }
         }
 
     }
