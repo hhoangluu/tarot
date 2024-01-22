@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     public bool isMobile()
     {
-       // return true;
+    //    return true;
 #if !UNITY_EDITOR && UNITY_WEBGL
         return IsMobile();
 #endif

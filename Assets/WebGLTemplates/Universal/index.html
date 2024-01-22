@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="TemplateData/img/favicon.ico?cb=%UNITY_CUSTOM_SOME_TAG%">
     <link rel="stylesheet" href="TemplateData/css/style.css?cb=%UNITY_CUSTOM_SOME_TAG%">
     <script src="Build/UnityLoader.js?cb=%UNITY_CUSTOM_SOME_TAG%"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
 	<script>
 		function ToggleFullScreen() {
 			var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
@@ -59,7 +60,7 @@
 		function UnityProgress(gameInstance, progress) {
 			if (!gameInstance.Module)
 			return;
-			document.getElementById("loadingBlock").style.display = "inherit";	 	
+			// document.getElementById("loadingBlock").style.display = "inherit";	 	
 			document.getElementById("fullBar").style.width = (100 * progress) + "%";
 			document.getElementById("emptyBar").style.width = (100 * (1 - progress)) + "%";
 			if (progress == 1)
@@ -67,7 +68,7 @@
 				setTimeout(function(){
 					 document.getElementById("loadingBlock").style.display = "none"; 
 					 window.scrollTo(0,-5000);
-			}, 3000);
+			}, 2000);
 			}	
 			
 		}
@@ -99,16 +100,15 @@
 		
 		
 		<div id="loadingBlock">
-			<img class="logo" src="TemplateData/img/Logo.png?cb=%UNITY_CUSTOM_SOME_TAG%"></img>
-			<!-- <span class="subtitle"> HOROSCOPE <br> -->
-			
+			<!-- <img class="logo" src="TemplateData/img/Logo.png?cb=2"></img> -->
 			</span>
-			
-			<div id="progressBar">
-				<div>LOADING ...</div>
-				<div class="centered">
-					<div id="emptyBar"></div>
-					<div id="fullBar"></div>
+			<div id="loadingContainer">
+				<div id="loop" style="width: 300px; margin: auto"></div>
+				<div id="progressBar">
+					<div class="centered">
+						<div id="emptyBar"></div>
+						<div id="fullBar"></div>
+					</div>
 				</div>
 			</div>
 			
@@ -131,6 +131,16 @@
 		</div>
 		
 	</div>
-	
+	<script>
+		// Replace 'your-animation.json' with the path to your exported JSON file
+		// Replace 'animation-container' with the ID of your container element
+		lottie.loadAnimation({
+		  container: document.getElementById('loop'),
+		  renderer: 'svg', // or 'canvas'
+		  loop: true,
+		  autoplay: true,
+		  path: 'TemplateData/loading tarot.json',
+		});
+	  </script>
   </body>
 </html>
