@@ -62,7 +62,7 @@
 			return;
 			// document.getElementById("loadingBlock").style.display = "inherit";	 	
 			document.getElementById("fullBar").style.width = (100 * progress) + "%";
-			document.getElementById("emptyBar").style.width = (100 * (1 - progress)) + "%";
+			//document.getElementById("emptyBar").style.width = (100 * (1 - progress)) + "%";
 			if (progress == 1)
 			{
 				setTimeout(function(){
@@ -106,8 +106,7 @@
 				<div id="loop" style="width: 300px; margin: auto"></div>
 				<div id="progressBar">
 					<div class="centered">
-						<div id="emptyBar"></div>
-						<div id="fullBar"></div>
+						<div id="emptyBar"><div id="fullBar"></div></div>
 					</div>
 				</div>
 			</div>
