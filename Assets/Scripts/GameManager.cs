@@ -32,9 +32,12 @@ public class GameManager : MonoBehaviour
     private CardInfo cardInfo;
     [DllImport("__Internal")]
     private static extern bool IsMobile();
-
+    public bool cheatMB;
     public bool isMobile()
     {
+        #if UNITY_EDITOR
+        return cheatMB;
+        #endif
     //    return true;
 #if !UNITY_EDITOR && UNITY_WEBGL
         return IsMobile();
