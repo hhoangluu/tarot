@@ -68,6 +68,8 @@
 				setTimeout(function () {
 					document.getElementById("loadingBlock").style.display = "none";
 					window.scrollTo(0, -5000);
+					const canvas = document.getElementById('#canvas')
+					resizeToMatchDisplaySize(canvas);
 				}, 2000);
 			}
 
@@ -85,6 +87,16 @@
 			const canvas = document.getElementById('#canvas')
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
+		}
+		function resizeToMatchDisplaySize(canvas) {
+  			var displayWidth  = canvas.clientWidth  * window.devicePixelRatio;
+  			var displayHeight = canvas.clientHeight * window.devicePixelRatio;
+  			if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+    			canvas.width  = displayWidth;
+    			canvas.height = displayHeight;
+    			return true;
+  				}
+ 		 	return false;
 		}
 	</script>
 </head>

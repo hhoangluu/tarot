@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Lang_vi
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: vi
+  m_SharedData: {fileID: 11400000, guid: 1ab995a43f9a7454f9a75a4b7e902bfb, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 33238941696
+    m_Localized: "B\u1EAFt \u0111\u1EA7u"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 451448799232
+    m_Localized: "B\u1EAFt \u0111\u1EA7u l\u1EA1i"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2026242179072
+    m_Localized: "Ch\u1ECDn ch\u1EE7 \u0111\u1EC1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14541030293504
+    m_Localized: "Xem b\xE0i tarot tr\u1EF1c tuy\u1EBFn"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 1

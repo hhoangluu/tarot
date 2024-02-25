@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class CardInfo
 {
     public int id;
     public string name;
     public string predictions;
+    public string predictions_vi;
+
 }
 [System.Serializable]
 public class Platform
@@ -22,23 +26,42 @@ public class Platform
 }
 public class GameManager : MonoBehaviour
 {
+    public enum Language
+    {
+        English,
+        Vietnamese
+    }
     public static GameManager instance { get; private set; }
+    private static Language _language;
+    public static Language language
+    {
+        get => _language;
+        private set
+        {
+            if (value != language)
+            {
+                _language = value;
+                onLanguageChanged?.Invoke(value);
+            }
+        }
+    }
+    public static event System.Action<Language> onLanguageChanged;
     [SerializeField] Platform pc;
     [SerializeField] Platform mobile;
 
     private Platform currentPlatform;
     string endpoint = "https://widget-api.gamemondi.co/api/v1/tarots/";
-    
+
     private CardInfo cardInfo;
     [DllImport("__Internal")]
     private static extern bool IsMobile();
     public bool cheatMB;
     public bool isMobile()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         return cheatMB;
-        #endif
-    //    return true;
+#endif
+        //    return true;
 #if !UNITY_EDITOR && UNITY_WEBGL
         return IsMobile();
 #endif
@@ -48,8 +71,8 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         if (isMobile())
-        currentPlatform = mobile;
-        else 
+            currentPlatform = mobile;
+        else
             currentPlatform = pc;
         currentPlatform.parent.SetActive(true);
     }
@@ -120,6 +143,25 @@ public class GameManager : MonoBehaviour
         {
             yield return from.Hide();
             yield return currentPlatform.uiStart.Show();
+        }
+    }
+    public Dropdown dropdown;
+
+    IEnumerator Start()
+    {
+        // Wait for the localization system to initialize
+        yield return LocalizationSettings.InitializationOperation;
+        dropdown.onValueChanged.AddListener(LocaleSelected);
+    }
+    static void LocaleSelected(int index)
+    {
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+        if (index == 0)
+        {
+            language = Language.English;
+        }
+        else {
+            language = Language.Vietnamese;
         }
     }
 }
