@@ -36,5 +36,21 @@ MonoBehaviour:
       TAROT CARD READING'
     m_Metadata:
       m_Items: []
+  - m_Id: 708559691177984
+    m_Localized: LOVE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 708867582451712
+    m_Localized: View reading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 709093751906304
+    m_Localized: CARRER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 709775531827200
+    m_Localized: FINANCE
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

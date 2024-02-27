@@ -23,15 +23,33 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 451448799232
-    m_Localized: "B\u1EAFt \u0111\u1EA7u l\u1EA1i"
+    m_Localized: "Quay l\u1EA1i"
     m_Metadata:
       m_Items: []
   - m_Id: 2026242179072
-    m_Localized: "Ch\u1ECDn ch\u1EE7 \u0111\u1EC1"
+    m_Localized: "Ch\u1ECDn 1 ch\u1EE7 \u0111\u1EC1 \u0111\u1EC3 t\u1EADp trung xem
+      s\u1EBD hi\u1EC7u qu\u1EA3 nh\u1EA5t"
     m_Metadata:
       m_Items: []
   - m_Id: 14541030293504
-    m_Localized: "Xem b\xE0i tarot tr\u1EF1c tuy\u1EBFn"
+    m_Localized: "Coi b\xE0i Tarot tr\u1EF1c tuy\u1EBFn\n c\u1EE7a b\u1EA1n t\u1EA1i
+      \u0111\xE2y"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 708559691177984
+    m_Localized: "T\xECnh y\xEAu"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 708867582451712
+    m_Localized: "Xem b\xE0i"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 709093751906304
+    m_Localized: "S\u1EF1 nghi\u1EC7p"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 709775531827200
+    m_Localized: "T\xE0i ch\xEDnh"
     m_Metadata:
       m_Items: []
   references:
