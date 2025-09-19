@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta property="og:title" content="Gamemondi (Tarot): Reveal things around you" />
+  <meta property="og:description" content="The mystery of how the right cards always come out aside, Tarot works through the unconscious mind, delivering messages through symbolism and archetypes." />
+  <meta property="og:image" content="TemplateData/img/thumb-social-tarot.webp" />
+  <title>Horoscope</title>
+
+  <link rel="shortcut icon" href="TemplateData/img/favicon.ico" />
+  <link rel="stylesheet" href="TemplateData/css/style.css" />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
+
+  <style>
+    html, body { margin:0; padding:0; height:100%; background:#000; overflow:hidden; }
+    .keepRatio, .webgl-content, #gameContainer { position:relative; width:100%; height:100%; }
+    #unity-canvas { width:100%; height:100%; display:block; background:#000; }
+    #fullScreenButton {
+      position:absolute; right:16px; top:16px; width:40px; height:40px; z-index:10; border:0;
+      background: transparent url('TemplateData/img/fullScreen_on.png') center / contain no-repeat;
+      cursor:pointer;
+    }
+    #loadingBlock {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:16px; background:#000; z-index:5;
+    }
+    #progressBar { width:300px; max-width:70vw; }
+    #emptyBar { width:100%; height:10px; background:rgba(255,255,255,.2); border-radius:6px; overflow:hidden; }
+    #fullBar { width:0%; height:100%; background:#fff; transition:width .15s linear; }
+    #warningBrowserBlock, #errorBrowserBlock { margin-top:12px; color:#fff; text-align:center; }
+    .browserIcons img { height:40px; margin:0 8px; }
+  </style>
+
+  <!-- Unity loader: Unity sẽ tự thay Builld.loader.js -->
+  <script src="Build/Builld.loader.js"></script>
+
+  <script>
+    // -------- Compatibility (đơn giản) --------
+    function hasWebGL2() {
+      try { const c = document.createElement('canvas'); return !!c.getContext('webgl2'); }
+      catch(e){ return false; }
+    }
+    function checkCompatibility(onready, onwarn, onerror) {
+      if (!hasWebGL2()) { const el = document.getElementById("errorBrowserBlock"); if (el) el.style.display = "inherit"; onerror && onerror(); return; }
+      const ua = navigator.userAgent; const isPreferred = /Firefox|Chrome|Safari/i.test(ua);
+      if (!isPreferred) { const warn = document.getElementById("warningBrowserBlock"); if (warn) warn.style.display = "inherit"; onwarn && onwarn(); }
+      onready && onready();
+    }
+
+    // -------- Loading UI --------
+    function showLoading(show){ const b = document.getElementById('loadingBlock'); if (b) b.style.display = show ? 'flex' : 'none'; }
+
+    // -------- Fullscreen --------
+    let unityInstance = null;
+    function ToggleFullScreen() {
+      if (!unityInstance) return;
+      // Unity tự quản lý fullscreen
+      const isFS = !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement;
+      unityInstance.SetFullscreen(isFS ? 1 : 0);
+      const btn = document.getElementById("fullScreenButton");
+      if (btn) btn.style.backgroundImage = isFS
+        ? "url('TemplateData/img/fullScreen_off.png')"
+        : "url('TemplateData/img/fullScreen_on.png')";
+    }
+
+    // -------- Progress callback (đúng chữ ký: (instance, progress)) --------
+    function onUnityProgress(progress) {
+
+      const bar = document.getElementById('fullBar');
+      if (bar) bar.style.width = (progress * 100).toFixed(1) + '%';
+      if (progress >= 1) setTimeout(() => showLoading(false), 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Lottie loader
+      const loop = document.getElementById('loop');
+      if (window.lottie && loop) {
+        lottie.loadAnimation({ container: loop, renderer: 'svg', loop: true, autoplay: true, path: 'TemplateData/loading tarot.json' });
+      }
+
+      const canvas = document.getElementById('unity-canvas');
+
+      checkCompatibility(() => {}, () => {}, () => {});
+
+      // Config dùng token Unity — Unity sẽ tự thay khi build
+      var buildUrl = "Build";
+      var config = {
+        dataUrl: buildUrl + "/Builld.data",
+        frameworkUrl: buildUrl + "/Builld.framework.js",
+        codeUrl: buildUrl + "/Builld.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Horoscope",
+        productVersion: "0.1",
+        matchWebGLToCanvasSize: true,
+        devicePixelRatio: window.devicePixelRatio || 1,
+        showBanner: function(msg, type){ if (type==='error') console.error(msg); else if (type==='warning') console.warn(msg); else console.log(msg); }
+      };
+
+      showLoading(true);
+      // createUnityInstance đã có do loader phía trên
+      createUnityInstance(canvas, config, onUnityProgress).then((instance) => {
+        unityInstance = instance;
+      }).catch((e) => {
+        console.error(e);
+        const err = document.getElementById("errorBrowserBlock");
+        if (err) { err.style.display = "inherit"; err.textContent = "Failed to load the Unity WebGL build. See console for details."; }
+        showLoading(false);
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="keepRatio">
+    <div class="webgl-content">
+      <button id="fullScreenButton" onclick="ToggleFullScreen()"></button>
+      <div id="gameContainer">
+        <!-- Canvas: để CSS điều khiển size; không cần width/height attribute -->
+        <canvas id="unity-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loadingBlock">
+      <div id="loadingContainer">
+        <div id="loop" style="width:300px; margin:auto"></div>
+        <div id="progressBar">
+          <div class="centered">
+            <div id="emptyBar"><div id="fullBar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="warningBrowserBlock" style="display:none;">
+        <div class="warningBrowserText" style="color:#fff;">
+          Your browser may not be compatible with this website. For the best experience, try one of these:
+        </div>
+        <div class="browserIcons">
+          <a href="https://www.mozilla.org/firefox" target="_blank"><img src="TemplateData/img/browser-firefox.png" alt="Firefox browser" /></a>
+          <a href="https://www.googl
