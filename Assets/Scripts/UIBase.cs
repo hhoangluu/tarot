@@ -35,7 +35,6 @@ public class UIBase : MonoBehaviour
         foreach (var graphic in graphics)
         {
             graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, 0);
-            Debug.Log("SHOW graphic" + graphic);
 
             tween = graphic.DOFade(1, 1);
         }

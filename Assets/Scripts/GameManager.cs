@@ -6,14 +6,24 @@ using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-
+[System.Serializable]
+public class ReponseInfo
+{
+    public int nhits;
+    public CardInfo[] cards;
+}
+[System.Serializable]
 public class CardInfo
 {
-    public int id;
+    public int value_int;
     public string name;
-    public string predictions;
-    public string predictions_vi;
-
+    public string desc;
+    public string meaning_rev;
+    public string name_short;
+    public string value;
+    public string suit;
+    public string type;
+    public string meaning_up;
 }
 [System.Serializable]
 public class Platform
@@ -50,7 +60,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Platform mobile;
 
     private Platform currentPlatform;
-    string endpoint = "https://widget-api.gamemondi.co/api/v1/tarots/";
+    string endpoint = "https://tarotapi.dev/api/v1/cards/random?n=1\n";
 
     private CardInfo cardInfo;
     [DllImport("__Internal")]
@@ -100,7 +110,7 @@ public class GameManager : MonoBehaviour
 
         IEnumerator GetCardData()
         {
-            using (UnityWebRequest webRequest = UnityWebRequest.Get($"{endpoint}{id}?type={type}"))
+            using (UnityWebRequest webRequest = UnityWebRequest.Get($"{endpoint}"))
             {
                 // Request and wait for the desired page.
                 yield return webRequest.SendWebRequest();
@@ -113,11 +123,12 @@ public class GameManager : MonoBehaviour
                 else
                 {
 
-                    Debug.Log($"{endpoint}{id}?{type}");
+                    Debug.Log($"{endpoint}");
 
                     Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
 
-                    cardInfo = JsonUtility.FromJson<CardInfo>(webRequest.downloadHandler.text);
+                    cardInfo = JsonUtility.FromJson<ReponseInfo>(webRequest.downloadHandler.text).cards[0];
+                    Debug.Log(cardInfo.name);
                 }
             }
         }
@@ -145,13 +156,15 @@ public class GameManager : MonoBehaviour
             yield return currentPlatform.uiStart.Show();
         }
     }
-    public Dropdown dropdown;
+    public Dropdown dropdownPC;
+    public Dropdown dropdownMB;
 
     IEnumerator Start()
     {
         // Wait for the localization system to initialize
         yield return LocalizationSettings.InitializationOperation;
-        dropdown.onValueChanged.AddListener(LocaleSelected);
+        dropdownPC.onValueChanged.AddListener(LocaleSelected);
+        dropdownMB.onValueChanged.AddListener(LocaleSelected);
     }
     static void LocaleSelected(int index)
     {

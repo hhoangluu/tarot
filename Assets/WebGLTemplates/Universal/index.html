@@ -1,164 +1,148 @@
 <!DOCTYPE html>
 <html lang="en-us">
-
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta property="og:title" content="Gamemondi (Tarot): Reveal things around you" />
-	<meta property="og:description"
-		content="The mystery of how the right cards always come out aside, Tarot works through the unconscious mind, delivering messages through symbolism and archetypes." />
-	<meta property="og:image" content="TemplateData/img/thumb-social-tarot.webp" />
-	<title>GameMondi Tarot</title>
-	<link rel="shortcut icon" href="TemplateData/img/favicon.ico?cb=%UNITY_CUSTOM_SOME_TAG%">
-	<link rel="stylesheet" href="TemplateData/css/style.css?cb=%UNITY_CUSTOM_SOME_TAG%">
-	<script src="Build/UnityLoader.js?cb=%UNITY_CUSTOM_SOME_TAG%"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
-	<script>
-		function ToggleFullScreen() {
-			var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
-				(document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
-				(document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
-				(document.msFullscreenElement && document.msFullscreenElement !== null);
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta property="og:title" content="Gamemondi (Tarot): Reveal things around you" />
+  <meta property="og:description" content="The mystery of how the right cards always come out aside, Tarot works through the unconscious mind, delivering messages through symbolism and archetypes." />
+  <meta property="og:image" content="TemplateData/img/thumb-social-tarot.webp" />
+  <title>{{{ PRODUCT_NAME }}}</title>
 
-			var element = document.body.getElementsByClassName("webgl-content")[0];
+  <link rel="shortcut icon" href="TemplateData/img/favicon.ico" />
+  <link rel="stylesheet" href="TemplateData/css/style.css" />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
 
-			if (!isInFullScreen) {
-				document.getElementById("fullScreenButton").style.backgroundImage = "url('TemplateData/img/fullScreen_off.png')";
-				return (element.requestFullscreen ||
-					element.webkitRequestFullscreen ||
-					element.mozRequestFullScreen ||
-					element.msRequestFullscreen).call(element);
-			}
-			else {
-				document.getElementById("fullScreenButton").style.backgroundImage = "url('TemplateData/img/fullScreen_on.png')";
-				if (document.exitFullscreen) {
-					document.exitFullscreen();
-				} else if (document.webkitExitFullscreen) {
-					document.webkitExitFullscreen();
-				} else if (document.mozCancelFullScreen) {
-					document.mozCancelFullScreen();
-				} else if (document.msExitFullscreen) {
-					document.msExitFullscreen();
-				}
-			}
-		}
+  <style>
+    html, body { margin:0; padding:0; height:100%; background:#000; overflow:hidden; }
+    .keepRatio, .webgl-content, #gameContainer { position:relative; width:100%; height:100%; }
+    #unity-canvas { width:100%; height:100%; display:block; background:#000; }
+    #fullScreenButton {
+      position:absolute; right:16px; top:16px; width:40px; height:40px; z-index:10; border:0;
+      background: transparent url('TemplateData/img/fullScreen_on.png') center / contain no-repeat;
+      cursor:pointer;
+    }
+    #loadingBlock {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:16px; background:#000; z-index:5;
+    }
+    #progressBar { width:300px; max-width:70vw; }
+    #emptyBar { width:100%; height:10px; background:rgba(255,255,255,.2); border-radius:6px; overflow:hidden; }
+    #fullBar { width:0%; height:100%; background:#fff; transition:width .15s linear; }
+    #warningBrowserBlock, #errorBrowserBlock { margin-top:12px; color:#fff; text-align:center; }
+    .browserIcons img { height:40px; margin:0 8px; }
+  </style>
 
-		function CheckCompatibility(gameInstance, onsuccess, onerror) {
-			if (!UnityLoader.SystemInfo.hasWebGL) {
-				document.getElementById("errorBrowserBlock").style.display = "inherit";
-				onerror();
-			} else if (["Firefox", "Chrome", "Safari"].indexOf(UnityLoader.SystemInfo.browser) == -1) {
-				document.getElementById("warningBrowserBlock").style.display = "inherit";
-				onsuccess();
-			} else {
-				onsuccess();
-			}
-		}
-		var buildUrl = "%UNITY_WEBGL_BUILD_URL%";
-		function RuntimeInitialized() {
-		}
+  <!-- Unity loader: Unity sẽ tự thay {{{ LOADER_FILENAME }}} -->
+  <script src="Build/{{{ LOADER_FILENAME }}}"></script>
 
-		function UnityProgress(gameInstance, progress) {
-			if (!gameInstance.Module)
-				return;
-			// document.getElementById("loadingBlock").style.display = "inherit";	 	
-			document.getElementById("fullBar").style.width = (100 * progress) + "%";
-			//document.getElementById("emptyBar").style.width = (100 * (1 - progress)) + "%";
-			if (progress == 1) {
-				setTimeout(function () {
-					document.getElementById("loadingBlock").style.display = "none";
-					window.scrollTo(0, -5000);
-					const canvas = document.getElementById('#canvas')
-					resizeToMatchDisplaySize(canvas);
-				}, 2000);
-			}
+  <script>
+    // -------- Compatibility (đơn giản) --------
+    function hasWebGL2() {
+      try { const c = document.createElement('canvas'); return !!c.getContext('webgl2'); }
+      catch(e){ return false; }
+    }
+    function checkCompatibility(onready, onwarn, onerror) {
+      if (!hasWebGL2()) { const el = document.getElementById("errorBrowserBlock"); if (el) el.style.display = "inherit"; onerror && onerror(); return; }
+      const ua = navigator.userAgent; const isPreferred = /Firefox|Chrome|Safari/i.test(ua);
+      if (!isPreferred) { const warn = document.getElementById("warningBrowserBlock"); if (warn) warn.style.display = "inherit"; onwarn && onwarn(); }
+      onready && onready();
+    }
 
-		}
+    // -------- Loading UI --------
+    function showLoading(show){ const b = document.getElementById('loadingBlock'); if (b) b.style.display = show ? 'flex' : 'none'; }
 
-		var gameInstance = UnityLoader.instantiate("gameContainer", "%UNITY_WEBGL_BUILD_URL%", {
-			onProgress: UnityProgress,
-			compatibilityCheck: CheckCompatibility,
-			Module: {
-				//TOTAL_MEMORY: 268435456,
-				onRuntimeInitialized: RuntimeInitialized,
-			},
-		});
-		var setCanvasSize = function () {
-			const canvas = document.getElementById('#canvas')
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
-		}
-		function resizeToMatchDisplaySize(canvas) {
-  			var displayWidth  = canvas.clientWidth  * window.devicePixelRatio;
-  			var displayHeight = canvas.clientHeight * window.devicePixelRatio;
-  			if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
-    			canvas.width  = displayWidth;
-    			canvas.height = displayHeight;
-    			return true;
-  				}
- 		 	return false;
-		}
-	</script>
+    // -------- Fullscreen --------
+    let unityInstance = null;
+    function ToggleFullScreen() {
+      if (!unityInstance) return;
+      // Unity tự quản lý fullscreen
+      const isFS = !document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement;
+      unityInstance.SetFullscreen(isFS ? 1 : 0);
+      const btn = document.getElementById("fullScreenButton");
+      if (btn) btn.style.backgroundImage = isFS
+        ? "url('TemplateData/img/fullScreen_off.png')"
+        : "url('TemplateData/img/fullScreen_on.png')";
+    }
+
+    // -------- Progress callback (đúng chữ ký: (instance, progress)) --------
+    function onUnityProgress(progress) {
+
+      const bar = document.getElementById('fullBar');
+      if (bar) bar.style.width = (progress * 100).toFixed(1) + '%';
+      if (progress >= 1) setTimeout(() => showLoading(false), 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Lottie loader
+      const loop = document.getElementById('loop');
+      if (window.lottie && loop) {
+        lottie.loadAnimation({ container: loop, renderer: 'svg', loop: true, autoplay: true, path: 'TemplateData/loading tarot.json' });
+      }
+
+      const canvas = document.getElementById('unity-canvas');
+
+      checkCompatibility(() => {}, () => {}, () => {});
+
+      // Config dùng token Unity — Unity sẽ tự thay khi build
+      var buildUrl = "Build";
+      var config = {
+        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#if MEMORY_FILENAME
+        memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "{{{ COMPANY_NAME }}}",
+        productName: "{{{ PRODUCT_NAME }}}",
+        productVersion: "{{{ PRODUCT_VERSION }}}",
+        matchWebGLToCanvasSize: true,
+        devicePixelRatio: window.devicePixelRatio || 1,
+        showBanner: function(msg, type){ if (type==='error') console.error(msg); else if (type==='warning') console.warn(msg); else console.log(msg); }
+      };
+
+      showLoading(true);
+      // createUnityInstance đã có do loader phía trên
+      createUnityInstance(canvas, config, onUnityProgress).then((instance) => {
+        unityInstance = instance;
+      }).catch((e) => {
+        console.error(e);
+        const err = document.getElementById("errorBrowserBlock");
+        if (err) { err.style.display = "inherit"; err.textContent = "Failed to load the Unity WebGL build. See console for details."; }
+        showLoading(false);
+      });
+    });
+  </script>
 </head>
 
 <body>
+  <div class="keepRatio">
+    <div class="webgl-content">
+      <button id="fullScreenButton" onclick="ToggleFullScreen()"></button>
+      <div id="gameContainer">
+        <!-- Canvas: để CSS điều khiển size; không cần width/height attribute -->
+        <canvas id="unity-canvas"></canvas>
+      </div>
+    </div>
 
-	<div class="keepRatio">
-		<div class="webgl-content">
-			<button id="fullScreenButton" onclick="ToggleFullScreen()"></button>
-			<div id="gameContainer">
-				<canvas id="canvas" style="width: 100%; height: 100%" width=%UNITY_WIDTH%
-					height=%UNITY_HEIGHT%></canvas>
-			</div>
-		</div>
+    <!-- Loading overlay -->
+    <div id="loadingBlock">
+      <div id="loadingContainer">
+        <div id="loop" style="width:300px; margin:auto"></div>
+        <div id="progressBar">
+          <div class="centered">
+            <div id="emptyBar"><div id="fullBar"></div></div>
+          </div>
+        </div>
+      </div>
 
-
-		<div id="loadingBlock">
-			<!-- <img class="logo" src="TemplateData/img/Logo.png?cb=2"></img> -->
-			</span>
-			<div id="loadingContainer">
-				<div id="loop" style="width: 300px; margin: auto"></div>
-				<div id="progressBar">
-					<div class="centered">
-						<div id="emptyBar">
-							<div id="fullBar"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div id="warningBrowserBlock" style="display:none;">
-				<div class="warningBrowserText">
-					Your browser may not be compatible with this website. For an optimal experience, we suggest you to
-					download one of this popular web browsers.
-				</div>
-				<div class="browserIcons">
-					<a href="https://www.mozilla.org/firefox" target="_blank"><img
-							src="TemplateData/img/browser-firefox.png?cb=%UNITY_CUSTOM_SOME_TAG%"
-							alt="Firefox browser"></a>
-					<a href="https://www.google.com/chrome" target="_blank"><img
-							src="TemplateData/img/browser-chrome.png?cb=%UNITY_CUSTOM_SOME_TAG%"
-							alt="Chrome browser"></a>
-					<a href="https://www.apple.com/safari/" target="_blank"><img
-							src="TemplateData/img/browser-safari.png?cb=%UNITY_CUSTOM_SOME_TAG%"
-							alt="Safari browser"></a>
-				</div>
-			</div>
-
-		</div>
-
-	</div>
-	<script>
-		// Replace 'your-animation.json' with the path to your exported JSON file
-		// Replace 'animation-container' with the ID of your container element
-		lottie.loadAnimation({
-			container: document.getElementById('loop'),
-			renderer: 'svg', // or 'canvas'
-			loop: true,
-			autoplay: true,
-			path: 'TemplateData/loading tarot.json',
-		});
-	</script>
-</body>
-
-</html>
+      <div id="warningBrowserBlock" style="display:none;">
+        <div class="warningBrowserText" style="color:#fff;">
+          Your browser may not be compatible with this website. For the best experience, try one of these:
+        </div>
+        <div class="browserIcons">
+          <a href="https://www.mozilla.org/firefox" target="_blank"><img src="TemplateData/img/browser-firefox.png" alt="Firefox browser" /></a>
+          <a href="https://www.googl

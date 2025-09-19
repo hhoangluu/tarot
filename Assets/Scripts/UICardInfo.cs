@@ -8,8 +8,8 @@ using UnityEngine.UI;
 public class UICardInfo : UIBase
 {
     [SerializeField] Button resetButton;
-    [SerializeField] TextMeshProUGUI cardName;
-    [SerializeField] TextMeshProUGUI cardDescription;
+    [SerializeField] Text cardName;
+    [SerializeField] Text cardDescription;
     [SerializeField] Image cardImage;
     private CardInfo cardInfo;
 
@@ -24,14 +24,14 @@ public class UICardInfo : UIBase
 
     private void OnLanguageChanged(GameManager.Language language)
     {
-        cardDescription.text = GameManager.language == GameManager.Language.English ? cardInfo.predictions : cardInfo.predictions_vi;
+        cardDescription.text = GameManager.language == GameManager.Language.English ? cardInfo.meaning_up : cardInfo.meaning_rev;
     }
 
     internal void Init(CardInfo cardInfo)
     {
         this.cardInfo = cardInfo;
         cardName.text = cardInfo.name;
-        cardDescription.text = GameManager.language == GameManager.Language.English ? cardInfo.predictions : cardInfo.predictions_vi;
+        cardDescription.text = GameManager.language == GameManager.Language.English ? cardInfo.meaning_up : cardInfo.meaning_rev;
         cardImage.sprite = Resources.Load<Sprite>($"Cards/{cardInfo.name.ToLower()}");
     }
 
